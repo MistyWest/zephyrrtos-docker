@@ -65,7 +65,7 @@ jobs:
       - name: Build and Push CI Image
         uses: docker/build-push-action@v6
         with:
-          push: true
+          push: ${{ github.event_name != 'pull_request' }}
           context: .
           file: Dockerfile.ci
           tags: ${{ steps.meta_ci.outputs.tags }}
@@ -112,7 +112,7 @@ jobs:
       - name: Build and Push Dev Image
         uses: docker/build-push-action@v6
         with:
-          push: true
+          push: ${{ github.event_name != 'pull_request' }}
           context: .
           file: Dockerfile.dev
           tags: ${{ steps.meta_dev.outputs.tags }}

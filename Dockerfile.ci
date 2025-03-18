@@ -18,7 +18,7 @@ ENV ZEPHYR_TOOLCHAIN_VARIANT=zephyr
 ENV ZEPHYR_SDK_VERSION=${ZSDK_VERSION}
 ENV ZEPHYR_SDK=${ZEPHYR_SDK_DIR}/zephyr-sdk-${ZSDK_VERSION}
 ENV ZEPHYR_SDK_INSTALL_DIR=${ZEPHYR_SDK}
-ENV CMAKE_PREFIX_PATH ${ZEPHYR_SDK_DIR}
+ENV CMAKE_PREFIX_PATH=${ZEPHYR_SDK_DIR}
 
 # Install udev and git
 RUN apt-get -y update && \
@@ -48,6 +48,9 @@ RUN chown -R ${USERNAME}:${USERNAME} ${ZEPHYR_SDK}
 # user's home directory.
 USER $USERNAME
 WORKDIR /home/$USERNAME
+
+# Needed for nRF53 Network Core builds
+RUN pip3 install ecdsa
 
 RUN sudo -E -- bash -c ' \
     ${ZEPHYR_SDK}/setup.sh -c && \

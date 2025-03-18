@@ -1,5 +1,5 @@
 ARG BASE_IMAGE
-FROM ${BASE_IMAGE:-zephyrprojectrtos/ci-base:latest}
+FROM ${BASE_IMAGE:-ghcr.io/mistywest/zephyr-ci:amd64}
 
 ARG JLINK_VERSION=812d
 ARG NORDIC_COMMAND_LINE_TOOLS_VERSION="10-24-2/nrf-command-line-tools-10.24.2"
@@ -7,9 +7,9 @@ ARG arch=amd64
 
 USER root
 
-# Install udev and git
+# Install udev git and vim
 RUN apt update && \
-    apt -y install screen git curl
+    apt -y install screen git curl vim
 
 # JLink Tools
 RUN <<EOT
@@ -77,13 +77,11 @@ EOT
 USER $USERNAME
 WORKDIR /home/$USERNAME
 
-# Install minimal SVD files
-# https://stackoverflow.com/a/52269934
-RUN git clone -n --depth=1 --filter=tree:0 https://github.com/cmsis-svd/cmsis-svd-data.git && \
-    cd cmsis-svd-data && \
-    git sparse-checkout set --no-cone data/STMicro && \
-    git checkout
-ENV SVD_DIR=/home/${USERNAME}/cmsis-svd-data/data/STMicro
+# Install STM32 SVD files
+RUN git clone -n --depth=1 https://github.com/modm-io/cmsis-svd-stm32
+ENV SVD_DIR=/home/${USERNAME}/cmsis-svd-stm32
+
+RUN pyocd pack --update && pyocd pack --install stm32h5
 
 ENV XDG_CACHE_HOME=/home/${USERNAME}/.cache
 ENV PATH="${ZEPHYR_SDK}/sysroots/x86_64-pokysdk-linux/usr/bin:${PATH}"
