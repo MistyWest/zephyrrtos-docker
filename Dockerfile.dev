@@ -7,9 +7,9 @@ ARG arch=amd64
 
 USER root
 
-# Install udev and git
+# Install udev git and vim
 RUN apt update && \
-    apt -y install screen git curl
+    apt -y install screen git curl vim
 
 # JLink Tools
 RUN <<EOT
@@ -76,14 +76,6 @@ EOT
 # user's home directory.
 USER $USERNAME
 WORKDIR /home/$USERNAME
-
-# Install minimal SVD files
-# https://stackoverflow.com/a/52269934
-# RUN git clone -n --depth=1 --filter=tree:0 https://github.com/cmsis-svd/cmsis-svd-data.git && \
-#     cd cmsis-svd-data && \
-#     git sparse-checkout set --no-cone data/STMicro && \
-#     git checkout
-# ENV SVD_DIR=/home/${USERNAME}/cmsis-svd-data/data/STMicro
 
 # Install STM32 SVD files
 RUN git clone -n --depth=1 https://github.com/modm-io/cmsis-svd-stm32
