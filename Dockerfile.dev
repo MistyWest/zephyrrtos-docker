@@ -7,9 +7,9 @@ ARG arch=amd64
 
 USER root
 
-# Install udev git and vim
+# Install dev tools
 RUN apt update && \
-    apt -y install screen git curl vim
+    apt -y install screen git curl vim bash-completion tree usbutils wget sed nano
 
 # JLink Tools
 RUN <<EOT
