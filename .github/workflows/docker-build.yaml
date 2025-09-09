@@ -105,7 +105,7 @@ jobs:
           images: |
             ${{ env.GHCR_BASE }}/${{ env.DEV_IMAGE_NAME }}
           flavor: |
-            latest=false
+            latest=auto
           tags: |
             type=raw,value=${{ matrix.arch }}
 
