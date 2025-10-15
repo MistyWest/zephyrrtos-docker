@@ -9,7 +9,7 @@ USER root
 
 # Install dev tools
 RUN apt update && \
-    apt -y install screen git curl vim bash-completion tree usbutils wget sed nano
+    apt -y install screen git curl vim bash-completion tree usbutils wget sed nano cppcheck
 
 # JLink Tools
 RUN <<EOT
