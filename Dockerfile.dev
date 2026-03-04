@@ -74,6 +74,23 @@ EOT
 # Run the Zephyr SDK setup script as 'user' in order to ensure that the
 # `Zephyr-sdk` CMake package is located in the package registry under the
 # user's home directory.
+# Download Zephyr requirements files for v4.3.0 and install Python deps
+ADD https://raw.githubusercontent.com/zephyrproject-rtos/zephyr/v4.3.0/scripts/requirements-base.txt /tmp/requirements/
+ADD https://raw.githubusercontent.com/zephyrproject-rtos/zephyr/v4.3.0/scripts/requirements-build-test.txt /tmp/requirements/
+ADD https://raw.githubusercontent.com/zephyrproject-rtos/zephyr/v4.3.0/scripts/requirements-run-test.txt /tmp/requirements/
+ADD https://raw.githubusercontent.com/zephyrproject-rtos/zephyr/v4.3.0/scripts/requirements-extras.txt /tmp/requirements/
+
+RUN pip3 install --no-cache-dir --upgrade pip && \
+    pip3 install --no-cache-dir \
+        -r /tmp/requirements/requirements-base.txt \
+        -r /tmp/requirements/requirements-build-test.txt \
+        -r /tmp/requirements/requirements-run-test.txt \
+        -r /tmp/requirements/requirements-extras.txt \
+        attrs jsonschema-specifications referencing rpds-py \
+        license-expression python-debian \
+        beartype rdflib semantic-version uritools xmltodict && \
+    rm -rf /tmp/requirements
+
 USER $USERNAME
 WORKDIR /home/$USERNAME
 
